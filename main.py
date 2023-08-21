@@ -10,6 +10,7 @@ class LinkedList:
 
     def append(self, data):
         new_node = Node(data)
+        print(new_node)
         if not self.head:
             self.head = new_node
             return
@@ -21,19 +22,19 @@ class LinkedList:
     # delete node based on value
     def remove(self, data):
         current = self.head
-        tmp = {}
+        # print(current, self.head)
         prev_node = None
         while current:
             if current.data == data:
                 tmp = current.next
                 current.next = None
-                # print(current)
+                print(tmp, current.next)
                 if prev_node:
                     prev_node.next = tmp
                 else:
                     self.head = tmp
+                # current is holding the ref of self.head but self.head is the node variable which needs to update as well, if removes head
                 current = tmp
-                # print(current, tmp, self.head)
             else:
                 prev_node = current
                 current = current.next
@@ -52,7 +53,7 @@ llist.append(10)
 llist.append(20)
 llist.append(30)
 llist.append(20)
-llist.remove(20)
+llist.remove(10)
 
 # Displaying the linked list
 llist.display()
