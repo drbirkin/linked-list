@@ -2,22 +2,24 @@ class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
+        self.prev = None
 
 
 class LinkedList:
     def __init__(self):
         self.head = None
+        self.tail = None # tmp
 
     def append(self, data):
         new_node = Node(data)
-        print(new_node)
+        
         if not self.head:
-            self.head = new_node
+            self.head = self.tail = new_node
             return
-        current = self.head
-        while current.next:
-            current = current.next
-        current.next = new_node
+        
+        self.tail.prev = new_node
+        new_node.next = self.tail
+        self.head = self.tail = new_node
 
     # delete node based on value
     def remove(self, data):
@@ -35,16 +37,24 @@ class LinkedList:
                     self.head = tmp
                 # current is holding the ref of self.head but self.head is the node variable which needs to update as well, if removes head
                 current = tmp
+                # return
             else:
                 prev_node = current
                 current = current.next
 
-    def display(self):
+    def display_forward(self):
         current = self.head
         while current:
-            print(current.data, end=" -> ")
+            print(current.data, end=" <-> ")
             current = current.next
         print("None")
+        
+    def display_backward(self):
+        current = self.tail
+        while current:
+            print(current.data, end=" <-> ")
+            current = current.prev
+        print('None')
 
 
 # Creating a linked list
@@ -53,7 +63,8 @@ llist.append(10)
 llist.append(20)
 llist.append(30)
 llist.append(20)
-llist.remove(10)
+# llist.remove(20)
 
 # Displaying the linked list
-llist.display()
+llist.display_forward()
+llist.display_backward()
