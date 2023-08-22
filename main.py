@@ -10,7 +10,7 @@ class LinkedList:
         self.head = None
         self.tail = None # tmp
 
-    def append(self, data):
+    def append_left(self, data):
         new_node = Node(data)
         
         if not self.head:
@@ -20,6 +20,19 @@ class LinkedList:
         self.head.prev = new_node
         new_node.next = self.head
         self.head = new_node
+        
+    def append_right(self, data):
+        new_node = Node(data)
+        
+        if not self.tail:
+            self.head = self.tail = new_node
+            return
+
+        new_node.prev = self.tail
+        self.tail.next = new_node
+        # overwrite the reference with current node
+        self.tail = new_node
+        
 
     # delete node based on value
     def remove(self, data):
@@ -59,10 +72,16 @@ class LinkedList:
 
 # Creating a linked list
 llist = LinkedList()
-llist.append(10)
-llist.append(20)
-llist.append(30)
-llist.append(20)
+# llist.append_left(10)
+# llist.append_left(20)
+# llist.append_left(30)
+# llist.append_left(20)
+
+llist.append_right(20)
+llist.append_right(10)
+llist.append_right(30)
+llist.append_right(10)
+
 # llist.remove(20)
 
 # Displaying the linked list
