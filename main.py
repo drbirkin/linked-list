@@ -35,7 +35,7 @@ class LinkedList:
 
 
     # delete node based on value
-    def remove(self, data):
+    def unlink(self, data):
         current = self.head
         # print(current, self.head)
         while current:
@@ -59,6 +59,40 @@ class LinkedList:
                 # return
             else:
                 current = next_node
+                
+    def mark(self, *data):
+        current = self.head
+        while current:
+            if current.data in data:
+                current.marked = True
+            
+            current = current.next
+                
+    def sweep(self):
+        current = self.head
+        
+        while current:
+            next_node = current.next
+            prev_node = current.prev
+            
+            if getattr(current, 'marked', False):
+                current.next = current.prev = None
+                
+                if next_node:
+                    next_node.prev = prev_node
+                else:
+                    self.tail = prev_node
+                
+                if prev_node:
+                    prev_node.next = next_node
+                else:
+                    self.head = prev_node
+                    
+                current = next_node
+            else:
+                current = next_node
+                
+                
 
     def display_forward(self):
         current = self.head
@@ -82,12 +116,43 @@ llist = LinkedList()
 # llist.append_left(30)
 # llist.append_left(20)
 
-llist.append_right(20)
-llist.append_right(10)
-llist.append_right(30)
-llist.append_right(10)
+# llist.append_right(20)
+# llist.append_right(10)
+# llist.append_right(30)
+# llist.append_right(10)
 
-llist.remove(10)
+for i in range(1, 101):
+    llist.append_right(i)
+
+# unlink
+# Pros and Cons
+# Pros:
+
+# Direct removal without the need for marking and sweeping.
+# Efficient for immediate deletion without memory overhead.
+# Cons:
+
+# Requires careful manipulation of pointers.
+# Immediate deletion may result in small performance overhead, especially for large lists
+llist.unlink(10)
+
+# mark and sweep
+# Pros and Cons
+# Pros:
+
+# Delayed deletion improves performance during traversal.
+# Reduces memory fragmentation compared to immediate deletion.
+# Can be advantageous when deletion is a costly operation.
+# Cons:
+
+# Requires additional memory for marking nodes.
+# May lead to a minor delay in memory reclamation (sweep phase).
+# More complex implementation than immediate deletion.
+llist.mark(3, 19, 22)
+llist.sweep()
+
+
+
 
 # Displaying the linked list
 llist.display_forward()
