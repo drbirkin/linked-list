@@ -2,61 +2,41 @@ class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
-        self.prev = None
 
 
 class LinkedList:
     def __init__(self):
         self.head = None
-        self.tail = None # tmp
 
-    def append_left(self, data):
+    def append(self, data):
         new_node = Node(data)
-
-        if not self.head:
-            self.head = self.tail = new_node
-            return
-
-        self.head.prev = new_node
-        new_node.next = self.head
-        self.head = new_node
-
-    def append_right(self, data):
-        new_node = Node(data)
-
-        if not self.tail:
-            self.head = self.tail = new_node
-            return
-
-        new_node.prev = self.tail
-        self.tail.next = new_node
-        # overwrite the reference with current node
-        self.tail = new_node
-
-
-    # delete node based on value
-    def unlink(self, data):
         current = self.head
-        # print(current, self.head)
+        if not self.head:
+            self.head = new_node
+            self.head.next = new_node
+            return
+        while current.next.data != self.head.data:
+            current = current.next
+        # append node and refer to the beginning
+        current.next = new_node
+        new_node.next = self.head             
+            
+    # delete node based on value
+    def unlink(self, *data):
+        current = self.head
+        tmp = None
         while current:
             next_node = current.next
-            prev_node = current.prev
-
-            if current.data == data:
-                current.next = current.prev = None
-
-                if next_node:
-                    next_node.prev = prev_node
-                else:
-                    self.tail = prev_node
-
-                if prev_node:
-                    prev_node.next = next_node
-                else:
-                    self.head = next_node
-                # current is holding the ref of self.head but self.head is the node variable which needs to update as well, if removes head
+            if current.next.data in data:
+                data = list(data).remove(current.next.data)
+                tmp = next_node.next
+                next_node.next = None
+                if data and len(data) >= 1:
+                    next_node = tmp
+                else:    
+                    current.next = self.head
+                    return
                 current = next_node
-                # return
             else:
                 current = next_node
                 
@@ -92,37 +72,32 @@ class LinkedList:
             else:
                 current = next_node
                 
-                
 
-    def display_forward(self):
+    def display(self):
         current = self.head
         while current:
             print(current.data, end=" <-> ")
             current = current.next
-        print("None")
-
-    def display_backward(self):
-        current = self.tail
-        while current:
-            print(current.data, end=" <-> ")
-            current = current.prev
-        print('None')
-
+            if current.data == self.head.data:
+                print("Begin of the node")
+                return
+            print(current.data)
+        
 
 # Creating a linked list
 llist = LinkedList()
-# llist.append_left(10)
-# llist.append_left(20)
-# llist.append_left(30)
-# llist.append_left(20)
+llist.append(10)
+llist.append(20)
+llist.append(30)
+llist.append(20)
 
-# llist.append_right(20)
-# llist.append_right(10)
-# llist.append_right(30)
-# llist.append_right(10)
+# llist.append(20)
+# llist.append(10)
+# llist.append(30)
+# llist.append(10)
 
-for i in range(1, 101):
-    llist.append_right(i)
+# for i in range(1, 101):
+#     llist.append(i)
 
 # unlink
 # Pros and Cons
@@ -148,12 +123,12 @@ llist.unlink(10)
 # Requires additional memory for marking nodes.
 # May lead to a minor delay in memory reclamation (sweep phase).
 # More complex implementation than immediate deletion.
-llist.mark(3, 19, 22)
-llist.sweep()
+# llist.mark(3, 19, 22)
+# llist.sweep()
 
 
 
 
 # Displaying the linked list
-llist.display_forward()
-llist.display_backward()
+llist.display()
+# llist.display_backward()
