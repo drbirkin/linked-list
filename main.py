@@ -88,19 +88,19 @@ class LinkedList:
 
 # Creating a linked list
 llist = LinkedList()
-# llist.append(10)
-# llist.append(20)
-# llist.append(30)
-# llist.append(20)
-# llist.append(10)
+llist.append(10)
+llist.append(20)
+llist.append(30)
+llist.append(20)
+llist.append(10)
 
 # llist.append(20)
 # llist.append(10)
 # llist.append(30)
 # llist.append(10)
 
-for i in range(1, 101):
-    llist.append(i)
+# for i in range(1, 101):
+#     llist.append(i)
 
 # unlink
 # Pros and Cons
@@ -112,7 +112,7 @@ for i in range(1, 101):
 
 # Requires careful manipulation of pointers.
 # Immediate deletion may result in small performance overhead, especially for large lists
-llist.unlink(10)
+# llist.unlink(10)
 
 # mark and sweep
 # Pros and Cons
@@ -126,7 +126,7 @@ llist.unlink(10)
 # Requires additional memory for marking nodes.
 # May lead to a minor delay in memory reclamation (sweep phase).
 # More complex implementation than immediate deletion.
-llist.mark(1, 3, 19, 22, 100, 99)
+llist.mark(20,30)
 llist.sweep()
 
 
