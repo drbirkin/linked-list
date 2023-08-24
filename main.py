@@ -19,59 +19,61 @@ class LinkedList:
             current = current.next
         # append node and refer to the beginning
         current.next = new_node
-        new_node.next = self.head             
-            
+        new_node.next = self.head
+
     # delete node based on value
-    def unlink(self, *data):
+    def unlink(self, data):
         current = self.head
         tmp = None
-        while current:
+        # case header = data
+        if self.head.data == data:
+            self.head = current.next
+            current.next = None
+            current = self.head
+        # case between header
+        while current.next.data != self.head.data:
             next_node = current.next
-            if current.next.data in data:
-                data = list(data).remove(current.next.data)
+            if next_node.data == data:
                 tmp = next_node.next
                 next_node.next = None
-                if data and len(data) >= 1:
-                    next_node = tmp
-                else:    
-                    current.next = self.head
-                    return
-                current = next_node
+                current.next = tmp
+
+                current = current.next
             else:
                 current = next_node
-                
+
     def mark(self, *data):
         current = self.head
-        while current:
-            if current.data in data:
-                current.marked = True
-            
+        # check header
+        if self.head.data in data:
+            self.head.marked = True
+        # exclude header include footer
+        while current.next.data != self.head.data:
+            if current.next.data in data:
+                current.next.marked = True
+
             current = current.next
-                
+
     def sweep(self):
         current = self.head
-        
-        while current:
+        tmp = None
+        if getattr(self.head, "marked", False):
+            self.head = current.next
+            current.next = None
+            current = self.head
+
+        while current.next.data != self.head.data:
             next_node = current.next
-            prev_node = current.prev
-            
-            if getattr(current, 'marked', False):
-                current.next = current.prev = None
-                
-                if next_node:
-                    next_node.prev = prev_node
-                else:
-                    self.tail = prev_node
-                
-                if prev_node:
-                    prev_node.next = next_node
-                else:
-                    self.head = prev_node
-                    
-                current = next_node
+            if getattr(current.next, "marked", False):
+                tmp = next_node.next
+                if not tmp:
+                    tmp = self.head
+                    print(tmp.data, current.data, getattr(tmp, "marked", False))
+                next_node.next = None
+                current.next = tmp
+                current = current.next
             else:
                 current = next_node
-                
 
     def display(self):
         current = self.head
@@ -82,22 +84,23 @@ class LinkedList:
                 print("Begin of the node")
                 return
             print(current.data)
-        
+
 
 # Creating a linked list
 llist = LinkedList()
-llist.append(10)
-llist.append(20)
-llist.append(30)
-llist.append(20)
+# llist.append(10)
+# llist.append(20)
+# llist.append(30)
+# llist.append(20)
+# llist.append(10)
 
 # llist.append(20)
 # llist.append(10)
 # llist.append(30)
 # llist.append(10)
 
-# for i in range(1, 101):
-#     llist.append(i)
+for i in range(1, 101):
+    llist.append(i)
 
 # unlink
 # Pros and Cons
@@ -123,10 +126,8 @@ llist.unlink(10)
 # Requires additional memory for marking nodes.
 # May lead to a minor delay in memory reclamation (sweep phase).
 # More complex implementation than immediate deletion.
-# llist.mark(3, 19, 22)
-# llist.sweep()
-
-
+llist.mark(1, 3, 19, 22, 100, 99)
+llist.sweep()
 
 
 # Displaying the linked list
