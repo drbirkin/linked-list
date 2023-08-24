@@ -56,24 +56,25 @@ class LinkedList:
 
     def sweep(self):
         current = self.head
-        tmp = None
-        if getattr(self.head, "marked", False):
-            self.head = current.next
-            current.next = None
-            current = self.head
-
-        while current.next.data != self.head.data:
+        prev = None
+        
+        while current:
+            print(current.data, current.next.data)
             next_node = current.next
-            if getattr(current.next, "marked", False):
-                tmp = next_node.next
-                if not tmp:
-                    tmp = self.head
-                    print(tmp.data, current.data, getattr(tmp, "marked", False))
-                next_node.next = None
-                current.next = tmp
-                current = current.next
+            if getattr(current, 'marked', False):
+                if prev:
+                    prev.next = next_node
+                    # current.next = None
+                else:
+                    # If it's head, update the head node
+                    self.head = prev = current.next
             else:
-                current = next_node
+                prev = current
+            # if not current.next and not getattr(current, 'marked', False):   
+            current = next_node
+            if current == self.head:
+                break
+        
 
     def display(self):
         current = self.head
@@ -81,7 +82,7 @@ class LinkedList:
             print(current.data, end=" <-> ")
             current = current.next
             if current.data == self.head.data:
-                print("Begin of the node")
+                print(f"Begin of the node {current.data}")
                 return
             print(current.data)
 
@@ -113,6 +114,8 @@ llist.append(10)
 # Requires careful manipulation of pointers.
 # Immediate deletion may result in small performance overhead, especially for large lists
 # llist.unlink(10)
+# llist.unlink(20)
+# llist.unlink(30)
 
 # mark and sweep
 # Pros and Cons
@@ -126,7 +129,7 @@ llist.append(10)
 # Requires additional memory for marking nodes.
 # May lead to a minor delay in memory reclamation (sweep phase).
 # More complex implementation than immediate deletion.
-llist.mark(20,30)
+llist.mark(10, 20, 30)
 llist.sweep()
 
 
